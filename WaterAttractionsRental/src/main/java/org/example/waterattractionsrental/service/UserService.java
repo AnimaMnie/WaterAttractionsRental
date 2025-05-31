@@ -1,6 +1,7 @@
 package org.example.waterattractionsrental.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.waterattractionsrental.entity.Role;
 import org.example.waterattractionsrental.entity.User;
 import org.example.waterattractionsrental.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -43,4 +44,23 @@ public class UserService {
     public void deleteById(Long id) {
         userRepository.deleteById(id);
     }
+
+    public User updateUser(Long id, UserDTO dto) {
+        return userRepository.findById(id)
+                .map(existing -> {
+                    existing.setUsername(dto.getUsername());
+
+                    if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
+                        existing.setPassword(passwordEncoder.encode(dto.getPassword()));
+                    }
+
+                    if (dto.getRole() != null && !dto.getRole().isBlank()) {
+                        existing.setRole(Role.valueOf(dto.getRole().toUpperCase()));
+                    }
+
+                    return userRepository.save(existing);
+                })
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
 }

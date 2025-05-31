@@ -11,7 +11,7 @@ import org.example.waterattractionsrental.dto.UserDTO;
 import java.util.List;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -46,6 +46,12 @@ public class UserController {
     @GetMapping("/encode")
     public String encode(@RequestParam String raw) {
         return passwordEncoder.encode(raw);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserDTO dto) {
+        User updated = userService.updateUser(id, dto);
+        return ResponseEntity.ok(updated);
     }
 
 }

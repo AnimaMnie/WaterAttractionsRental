@@ -18,4 +18,6 @@ public class ReservationDTO {
     private String username;
     private String attractionName;
     private String attractionType;
+    private Long attractionId;
+    private Long userId;
 }

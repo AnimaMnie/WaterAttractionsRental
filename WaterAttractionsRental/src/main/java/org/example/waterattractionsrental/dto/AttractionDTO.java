@@ -10,5 +10,6 @@ public class AttractionDTO {
     private Long id;
     private String name;
     private AttractionType type;
-    private boolean available;
+    private Boolean available;
+    private Double price;
 }

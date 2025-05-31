@@ -12,7 +12,7 @@ import org.example.waterattractionsrental.dto.AttractionDTO;
 import java.util.List;
 
 @RestController
-@RequestMapping("/attractions")
+@RequestMapping("/api/attractions")
 @RequiredArgsConstructor
 public class AttractionController {
 
@@ -32,8 +32,8 @@ public class AttractionController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public ResponseEntity<Attraction> getAttractionById(@PathVariable Long id) {
-        return attractionService.findById(id)
+    public ResponseEntity<AttractionDTO> getById(@PathVariable Long id) {
+        return attractionService.getAttractionById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -42,5 +42,11 @@ public class AttractionController {
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<Attraction> createAttraction(@RequestBody Attraction attraction) {
         return ResponseEntity.ok(attractionService.save(attraction));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Attraction> updateAttraction(@PathVariable Long id, @RequestBody AttractionDTO dto) {
+        Attraction updated = attractionService.updateAttraction(id, dto);
+        return ResponseEntity.ok(updated);
     }
 }

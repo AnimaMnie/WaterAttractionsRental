@@ -23,6 +23,8 @@ public class Attraction {
 
     private boolean available;
 
+    private double price;
+
     @OneToMany(mappedBy = "attraction", cascade = CascadeType.ALL)
     private List<Reservation> reservations;
 }
