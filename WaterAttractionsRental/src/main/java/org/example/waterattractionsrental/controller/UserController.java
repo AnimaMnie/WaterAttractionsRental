@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
+import org.example.waterattractionsrental.dto.UserDTO;
 import java.util.List;
 
 @RestController
@@ -20,10 +20,9 @@ public class UserController {
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public List<User> getAll() {
-        return userService.findAll();
+    public List<UserDTO> getAllUsers() {
+        return userService.getAllUsers();
     }
-
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public void delete(@PathVariable Long id) {

@@ -6,6 +6,8 @@ import org.example.waterattractionsrental.service.AttractionService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.example.waterattractionsrental.dto.UserDTO;
+import org.example.waterattractionsrental.dto.AttractionDTO;
 
 import java.util.List;
 
@@ -18,8 +20,8 @@ public class AttractionController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public List<Attraction> getAll() {
-        return attractionService.findAll();
+    public List<AttractionDTO> getAllAttractions() {
+        return attractionService.getAllAttractions();
     }
 
     @DeleteMapping("/{id}")

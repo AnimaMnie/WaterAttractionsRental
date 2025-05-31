@@ -4,6 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.example.waterattractionsrental.entity.Attraction;
 import org.example.waterattractionsrental.repository.AttractionRepository;
 import org.springframework.stereotype.Service;
+import org.example.waterattractionsrental.dto.ReservationDTO;
+import org.example.waterattractionsrental.dto.AttractionDTO;
+import java.util.stream.Collectors;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,8 +17,16 @@ public class AttractionService {
 
     private final AttractionRepository attractionRepository;
 
-    public List<Attraction> findAll() {
-        return attractionRepository.findAll();
+    public List<AttractionDTO> getAllAttractions() {
+        return attractionRepository.findAll().stream()
+                .map(attraction -> AttractionDTO.builder()
+                        .id(attraction.getId())
+                        .name(attraction.getName())
+                        .type(attraction.getType())
+                        .available(attraction.isAvailable())
+                        .build()
+                )
+                .collect(Collectors.toList());
     }
 
     public Optional<Attraction> findById(Long id) {
