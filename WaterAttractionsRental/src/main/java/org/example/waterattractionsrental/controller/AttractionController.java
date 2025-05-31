@@ -37,7 +37,7 @@ public class AttractionController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<Attraction> createAttraction(@RequestBody Attraction attraction) {
         return ResponseEntity.ok(attractionService.save(attraction));
     }
