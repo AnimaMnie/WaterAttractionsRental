@@ -1,11 +1,12 @@
 package org.example.waterattractionsrental.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.waterattractionsrental.dto.ReservationDTO;
 import org.example.waterattractionsrental.entity.Reservation;
 import org.example.waterattractionsrental.service.ReservationService;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,24 +18,28 @@ public class ReservationController {
     private final ReservationService reservationService;
 
     @GetMapping
-    public List<Reservation> getAll() {
-        return reservationService.findAll();
-    }
-
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        reservationService.deleteById(id);
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public List<ReservationDTO> getAll() {
+        return reservationService.getAllReservations();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Reservation> getReservationById(@PathVariable Long id) {
-        return reservationService.findById(id)
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ResponseEntity<ReservationDTO> getReservationById(@PathVariable Long id) {
+        return reservationService.findDTOById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Reservation> createReservation(@RequestBody Reservation reservation) {
-        return ResponseEntity.ok(reservationService.save(reservation));
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ResponseEntity<ReservationDTO> createReservation(@RequestBody Reservation reservation) {
+        return ResponseEntity.ok(reservationService.saveAndReturnDTO(reservation));
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public void delete(@PathVariable Long id) {
+        reservationService.deleteById(id);
     }
 }

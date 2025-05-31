@@ -1,14 +1,15 @@
 package org.example.waterattractionsrental.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.waterattractionsrental.dto.ReservationDTO;
 import org.example.waterattractionsrental.entity.Reservation;
 import org.example.waterattractionsrental.repository.ReservationRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -16,15 +17,18 @@ public class ReservationService {
 
     private final ReservationRepository reservationRepository;
 
-    public List<Reservation> findAll() {
-        return reservationRepository.findAll();
+    public List<ReservationDTO> getAllReservations() {
+        return reservationRepository.findAll().stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
     }
 
-    public Optional<Reservation> findById(Long id) {
-        return reservationRepository.findById(id);
+    public Optional<ReservationDTO> findDTOById(Long id) {
+        return reservationRepository.findById(id)
+                .map(this::mapToDTO);
     }
 
-    public Reservation save(Reservation reservation) {
+    public ReservationDTO saveAndReturnDTO(Reservation reservation) {
         Long attractionId = reservation.getAttraction().getId();
         LocalDateTime start = reservation.getStartTime();
         LocalDateTime end = reservation.getEndTime();
@@ -38,10 +42,22 @@ public class ReservationService {
             throw new IllegalArgumentException("Ta atrakcja jest już zarezerwowana w tym przedziale czasowym.");
         }
 
-        return reservationRepository.save(reservation);
+        Reservation saved = reservationRepository.save(reservation);
+        return mapToDTO(saved);
     }
 
     public void deleteById(Long id) {
         reservationRepository.deleteById(id);
+    }
+
+    private ReservationDTO mapToDTO(Reservation reservation) {
+        return ReservationDTO.builder()
+                .id(reservation.getId())
+                .startTime(reservation.getStartTime())
+                .endTime(reservation.getEndTime())
+                .username(reservation.getUser().getUsername())
+                .attractionName(reservation.getAttraction().getName())
+                .attractionType(reservation.getAttraction().getType().name())
+                .build();
     }
 }
