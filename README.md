@@ -123,9 +123,6 @@ pom.xml
 - `GET /api/reservations`  
 - `POST /api/reservations` (USER/ADMIN)  
 
-*(Pełna lista – patrz Swagger UI)*
-
-
 
 
 
@@ -134,20 +131,21 @@ pom.xml
 W projekcie **WaterAttractionsRental** polimorfizm jest zaimplementowany poprzez:
 
 - **Enumy** (`AttractionType`), które umożliwiają różnicowanie typów atrakcji (np. kajak, skuter wodny, rower wodny). Dzięki temu kod operuje na abstrakcyjnych typach, co pozwala łatwo dodawać nowe rodzaje atrakcji bez zmiany istniejącej logiki.
-- **Interfejsy i klasy abstrakcyjne** w warstwie serwisów i repozytoriów, co zapewnia elastyczność i możliwość rozszerzania funkcjonalności bez ingerencji w istniejący kod.
+
 
 ## Zastosowane wzorce projektowe
 
 W projekcie wykorzystano następujące wzorce projektowe:
 
-- **Repository Pattern**  
-  Abstrakcja warstwy dostępu do danych, która oddziela logikę biznesową od bezpośredniego zarządzania bazą danych.
 
 - **Strategy Pattern**  
   Stosowany przy implementacji szyfrowania haseł (`PasswordEncoder`), dzięki czemu mechanizm hashowania można łatwo wymieniać bez zmiany kodu korzystającego z tego szyfrowania.
 
 - **Builder Pattern**  
   Używany do tworzenia złożonych obiektów DTO, co poprawia czytelność kodu i ułatwia zarządzanie obiektami przenoszonymi między warstwami aplikacji.
+
+- **Repository Pattern**  
+  Abstrakcja warstwy dostępu do danych, która oddziela logikę biznesową od bezpośredniego zarządzania bazą danych.
 
 
 
