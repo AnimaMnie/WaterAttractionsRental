@@ -159,5 +159,5 @@ W projekcie wykorzystano następujące wzorce projektowe:
 
 ### Raport pokrycia
 
-![JaCoCo raport](jacoco.png)
+![JaCoCo raport](images/jacoco.png)
 
