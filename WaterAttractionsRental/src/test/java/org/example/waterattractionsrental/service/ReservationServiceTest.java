@@ -86,18 +86,22 @@ class ReservationServiceTest {
 
     @Test
     void saveAndReturnDTO_shouldSaveIfNoOverlap() {
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(attractionRepository.findById(2L)).thenReturn(Optional.of(attraction));
         when(reservationRepository.existsByAttractionIdAndStartTimeLessThanAndEndTimeGreaterThan(
                 2L, reservation.getEndTime(), reservation.getStartTime()))
                 .thenReturn(false);
-        when(reservationRepository.save(reservation)).thenReturn(reservation);
+        when(reservationRepository.save(any(Reservation.class))).thenReturn(reservation);
 
         ReservationDTO dto = reservationService.saveAndReturnDTO(reservation);
         assertEquals(reservation.getId(), dto.getId());
-        verify(reservationRepository).save(reservation);
+        verify(reservationRepository).save(any(Reservation.class));
     }
 
     @Test
     void saveAndReturnDTO_shouldThrowIfOverlap() {
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(attractionRepository.findById(2L)).thenReturn(Optional.of(attraction));
         when(reservationRepository.existsByAttractionIdAndStartTimeLessThanAndEndTimeGreaterThan(
                 2L, reservation.getEndTime(), reservation.getStartTime()))
                 .thenReturn(true);

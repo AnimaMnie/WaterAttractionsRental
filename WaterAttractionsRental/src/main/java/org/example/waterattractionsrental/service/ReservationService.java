@@ -33,7 +33,15 @@ public class ReservationService {
     }
 
     public ReservationDTO saveAndReturnDTO(Reservation reservation) {
+
         Long attractionId = reservation.getAttraction().getId();
+        Long userId = reservation.getUser().getId();
+
+        var attraction = attractionRepository.findById(attractionId)
+                .orElseThrow(() -> new IllegalArgumentException("Nie znaleziono atrakcji o id " + attractionId));
+        var user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Nie znaleziono użytkownika o id " + userId));
+
         LocalDateTime start = reservation.getStartTime();
         LocalDateTime end = reservation.getEndTime();
 
@@ -45,6 +53,11 @@ public class ReservationService {
         if (overlapping) {
             throw new IllegalArgumentException("Ta atrakcja jest już zarezerwowana w tym przedziale czasowym.");
         }
+
+
+        reservation.setAttraction(attraction);
+        reservation.setUser(user);
+
 
         Reservation saved = reservationRepository.save(reservation);
         return mapToDTO(saved);
