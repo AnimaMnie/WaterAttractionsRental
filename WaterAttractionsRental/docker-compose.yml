@@ -1,0 +1,28 @@
+version: "3.8"
+services:
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_DB: waterdb
+      POSTGRES_USER: wateruser
+      POSTGRES_PASSWORD: waterpass
+    ports:
+      - "5450:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/waterdb
+      SPRING_DATASOURCE_USERNAME: wateruser
+      SPRING_DATASOURCE_PASSWORD: waterpass
+      SPRING_JPA_HIBERNATE_DDL_AUTO: none
+    depends_on:
+      - db
+
+volumes:
+  db-data:
